@@ -1,0 +1,80 @@
+using recursion
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+int helper(string s,string t){
+    //base case
+    if(s.size()==0 || t.size()==0){
+        return 0;
+    }
+    //recursive call
+    if(s[0]==t[0]){
+        return 1+helper(s.substr(1),t.substr(1));
+    }
+    else{
+    int a=helper(s.substr(1),t);
+    int b=helper(s.substr(1),t.substr(1));
+    int c=helper(s,t.substr(1));
+    return max(a,max(b,c));
+        
+    }    
+    
+}
+
+int main()
+{
+    string a="xyz";
+    string b="zxay";
+    cout<<helper(a,b);
+    return 0;
+}
+//USING MEMORIZATION
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+int helper(string s,string t,int **output){
+    int m=s.size();
+    int n=t.size();
+    if(s.size()==0 || t.size()==0){
+        return 0;
+    }
+    if(output[m][n]!=-1){
+        return output[m][n];
+    }
+    int ans;
+    if(s[0]==t[0]){
+        ans=1+helper(s.substr(1),t.substr(1),output);
+    }
+    else{
+        int a=helper(s.substr(1),t,output);
+        int b=helper(s,t.substr(1),output);
+        int c=helper(s.substr(1),t.substr(1),output);
+        ans=max(a,max(b,c));
+    }
+    output[m][n]=ans;
+    return ans;
+}
+int main()
+{
+    string s="xyz";
+    string t="wxyz";
+    int m=s.size();
+    int n=t.size();
+    int **output=new int*[m+1];
+    for(int i=0;i<=m;i++){
+        output[i]=new int[n+1];
+        for(int j=0;j<=n;j++){
+            output[i][j]=-1;
+        }
+    }
+    cout<<helper(s,t,output);
+    return 0;
+}
